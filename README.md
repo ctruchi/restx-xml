@@ -1,6 +1,6 @@
 restx-xml
 =========
-Simple restx-module to handle mime "text/xml".
+Simple restx-module to handle mime "text/xml" and "application/xml".
 
 Example :
 
