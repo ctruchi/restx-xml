@@ -11,14 +11,14 @@ import java.lang.reflect.Type;
 
 public class XmlEntityResponseWriter<T> extends AbstractEntityResponseWriter<T> {
 
-    public static <T> XmlEntityResponseWriter<T> using(Type type, ObjectWriter writer) {
-        return new XmlEntityResponseWriter<>(type, writer);
+    public static <T> XmlEntityResponseWriter<T> using(String contentType, Type type, ObjectWriter writer) {
+        return new XmlEntityResponseWriter<>(contentType, type, writer);
     }
 
     protected final ObjectWriter writer;
 
-    protected XmlEntityResponseWriter(Type type, ObjectWriter writer) {
-        super(type, "text/xml");
+    protected XmlEntityResponseWriter(String contentType, Type type, ObjectWriter writer) {
+        super(type, contentType);
         this.writer = writer;
     }
 

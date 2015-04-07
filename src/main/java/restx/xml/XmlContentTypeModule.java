@@ -9,9 +9,13 @@ import restx.factory.Provides;
 
 import javax.inject.Named;
 import java.lang.reflect.Type;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Module
 public class XmlContentTypeModule {
+
+    public static final Pattern CONTENT_TYPE_PATTERN = Pattern.compile("^((?:text/xml)|(?:application/xml))(;.*)?$");
 
     @Provides
     public EntityResponseWriterFactory xmlEntityResponseWriterFactory(
@@ -19,11 +23,12 @@ public class XmlContentTypeModule {
         return new EntityResponseWriterFactory() {
             @Override
             public <T> Optional<? extends EntityResponseWriter<T>> mayBuildFor(Type valueType, String contentType) {
-                if (!contentType.startsWith("text/xml")) {
+                Matcher contentTypematcher = CONTENT_TYPE_PATTERN.matcher(contentType);
+                if (!contentTypematcher.find() || contentTypematcher.groupCount() < 1) {
                     return Optional.absent();
                 }
 
-                return Optional.of(XmlEntityResponseWriter.<T>using(valueType, objectWriter));
+                return Optional.of(XmlEntityResponseWriter.<T>using(contentTypematcher.group(1), valueType, objectWriter));
             }
         };
     }
